@@ -13,7 +13,7 @@ function RoutineCard({ r, own, i }) {
   const { set } = useStore();
   const hot = r.next;
   return (
-    <Animated.View entering={FadeInDown.delay(80 + i * 70).duration(420)} layout={LinearTransition.springify()}>
+    <Animated.View>
       <Card style={{ marginTop: 12 }} border={hot ? C.line2 : C.line}>
         <View style={[st.row, { justifyContent: 'space-between' }]}>
           <T f="display" size={19} style={{ flex: 1 }}>{r.name}</T>
@@ -44,7 +44,7 @@ export default function Train() {
         </Tap>
       </View>
 
-      <Animated.View entering={FadeInDown.duration(400)}>
+      <Animated.View>
         <Card style={{ marginTop: 20 }}>
           <Label>De tu entrenador</Label>
           <T f="dmed" size={17} style={{ marginTop: 8 }}>Plan Fuerza · semana 3 de 8</T>

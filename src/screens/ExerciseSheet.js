@@ -38,7 +38,7 @@ export default function ExerciseSheet() {
       <Animated.View entering={FadeIn.duration(200)} exiting={FadeOut.duration(200)} style={[StyleSheet.absoluteFill, { backgroundColor: 'rgba(0,0,0,0.6)' }]}>
         <Pressable style={{ flex: 1 }} onPress={close} accessibilityLabel="Cerrar" />
       </Animated.View>
-      <Animated.View entering={SlideInDown.springify().damping(22)} exiting={SlideOutDown.duration(220)} style={[styles.sheet, { paddingBottom: insets.bottom + 16, top: insets.top + 40 }]}>
+      <Animated.View entering={SlideInDown.duration(260).easing(Easing.bezier(0.2, 0.8, 0.2, 1))} exiting={SlideOutDown.duration(220)} style={[styles.sheet, { paddingBottom: insets.bottom + 16, top: insets.top + 40 }]}>
         <View style={styles.grab} />
         <View style={[st.row, { justifyContent: 'space-between', paddingHorizontal: 20 }]}>
           <Label>Cómo se hace</Label>
@@ -50,7 +50,7 @@ export default function ExerciseSheet() {
           <T size={14} color={C.mute} style={{ marginTop: 4 }}>{e.muscle}</T>
           <Label style={{ marginTop: 22 }}>Paso a paso</Label>
           {e.steps.map((t, i) => (
-            <Animated.View key={i} entering={FadeIn.delay(150 + i * 80)} style={[st.row, { alignItems: 'flex-start', gap: 12, marginTop: 12 }]}>
+            <Animated.View key={i} style={[st.row, { alignItems: 'flex-start', gap: 12, marginTop: 12 }]}>
               <View style={styles.num}><T f="bold" size={12} color={C.lime}>{i + 1}</T></View>
               <T size={15} color={C.sub} style={{ flex: 1, lineHeight: 22 }}>{t}</T>
             </Animated.View>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
-import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
+import Animated, { useSharedValue, useAnimatedStyle, withTiming, Easing } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useStore } from './store';
 import { Tap, T } from './ui';
@@ -22,7 +22,7 @@ export default function TabBar() {
   const idx = TABS.findIndex((t) => t[0] === s.tab);
   const x = useSharedValue(0);
   const tw = w / TABS.length;
-  useEffect(() => { x.value = withSpring(idx * tw, { damping: 20, stiffness: 220 }); }, [idx, tw]);
+  useEffect(() => { x.value = withTiming(idx * tw, { duration: 220, easing: Easing.out(Easing.cubic) }); }, [idx, tw]);
   const pill = useAnimatedStyle(() => ({ transform: [{ translateX: x.value }] }));
 
   return (
@@ -36,7 +36,7 @@ export default function TabBar() {
         {TABS.map(([id, label, icon]) => {
           const on = id === s.tab;
           return (
-            <Tap key={id} feedback="select" scale={0.9} onPress={() => set({ tab: id })} style={styles.tab} accessibilityLabel={label}>
+            <Tap key={id} feedback="select" scale={1} onPress={() => set({ tab: id })} style={styles.tab} accessibilityLabel={label}>
               <Icon name={icon} size={23} color={on ? C.lime : C.dim} />
               <T f="med" size={11} color={on ? C.text : C.dim} style={{ marginTop: 4 }}>{label}</T>
             </Tap>

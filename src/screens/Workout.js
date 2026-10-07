@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { ScrollView, View, StyleSheet, TextInput } from 'react-native';
-import Animated, { FadeInDown, FadeIn, ZoomIn, SlideInDown, SlideOutDown, LinearTransition, useSharedValue, useAnimatedStyle, withTiming, withSequence, withSpring, interpolateColor } from 'react-native-reanimated';
+import Animated, { Easing, FadeInDown, FadeIn, ZoomIn, SlideInDown, SlideOutDown, LinearTransition, useSharedValue, useAnimatedStyle, withTiming, withSequence, withSpring, interpolateColor } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useStore } from '../store';
 import { T, Tap, Avatar, haptic, st } from '../ui';
@@ -13,22 +13,20 @@ const dec = (n) => String(n).replace('.', ',');
 
 function SetRow({ n, prev, kg, reps, done, pr, onToggle }) {
   const p = useSharedValue(done ? 1 : 0);
-  const sc = useSharedValue(1);
-  useEffect(() => { p.value = withTiming(done ? 1 : 0, { duration: 260 }); }, [done]);
+  useEffect(() => { p.value = withTiming(done ? 1 : 0, { duration: 180 }); }, [done]);
   const row = useAnimatedStyle(() => ({ backgroundColor: interpolateColor(p.value, [0, 1], ['rgba(198,244,50,0)', 'rgba(198,244,50,0.10)']) }));
-  const box = useAnimatedStyle(() => ({ backgroundColor: interpolateColor(p.value, [0, 1], [C.line, C.lime]), transform: [{ scale: sc.value }] }));
+  const box = useAnimatedStyle(() => ({ backgroundColor: interpolateColor(p.value, [0, 1], [C.line, C.lime])}));
   const press = () => {
-    sc.value = withSequence(withTiming(0.8, { duration: 80 }), withSpring(1, { damping: 8, stiffness: 300 }));
     haptic(done ? 'light' : 'medium');
     onToggle();
   };
   return (
-    <Animated.View style={[styles.setRow, row]} entering={FadeIn.duration(250)}>
+    <Animated.View style={[styles.setRow, row]} entering={FadeIn.duration(150)}>
       <T f="bold" size={14} color={C.sub} style={styles.cN}>{n}</T>
       <T size={13} color={C.dim} style={styles.cPrev}>{prev}</T>
       <View style={styles.cKg}>
         <T f="bold" size={15}>{kg ? dec(kg) : 'PC'}</T>
-        {pr && <Animated.View entering={ZoomIn.springify()} style={styles.pr}><Icon name="trophy" size={11} color={C.bg} stroke={2.2} /></Animated.View>}
+        {pr && <Animated.View entering={FadeIn.duration(180)} style={styles.pr}><Icon name="trophy" size={11} color={C.bg} stroke={2.2} /></Animated.View>}
       </View>
       <T f="bold" size={15} style={styles.cReps}>{reps}</T>
       <Tap onPress={press} feedback={null} scale={1} style={styles.cChk} accessibilityLabel={`Serie ${n} hecha`}>
@@ -46,7 +44,7 @@ function RestBar({ left, max, onAdj, onSkip }) {
   useEffect(() => { w.value = withTiming(left / max, { duration: 950 }); }, [left, max]);
   const a = useAnimatedStyle(() => ({ width: `${w.value * 100}%` }));
   return (
-    <Animated.View entering={SlideInDown.springify().damping(20)} exiting={SlideOutDown.duration(200)} style={[styles.rest, { paddingBottom: Math.max(insets.bottom, 14) }]}>
+    <Animated.View entering={SlideInDown.duration(260).easing(Easing.bezier(0.2, 0.8, 0.2, 1))} exiting={SlideOutDown.duration(200)} style={[styles.rest, { paddingBottom: Math.max(insets.bottom, 14) }]}>
       <View style={styles.restTrack}><Animated.View style={[styles.restFill, a]} /></View>
       <View style={[st.row, { justifyContent: 'space-between', marginTop: 12 }]}>
         <Tap onPress={() => onAdj(-15)} style={styles.restBtn}><T f="bold" size={14}>−15</T></Tap>
@@ -136,7 +134,7 @@ export default function Workout() {
 
       <ScrollView contentContainerStyle={{ paddingBottom: 160 }} showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
         {blocks.map(({ id, e, sets }, bi) => (
-          <Animated.View key={id} entering={FadeInDown.delay(bi * 90).duration(400)} layout={LinearTransition.springify()} style={styles.block}>
+          <Animated.View key={id} style={styles.block}>
             <Tap onPress={() => set({ detail: { id, own } })} scale={0.98} style={[st.row, { gap: 12, paddingHorizontal: 20 }]}>
               <Avatar ini={e.ini} size={44} bg={C.card2} color={C.lime} />
               <View style={{ flex: 1 }}>

@@ -8,7 +8,7 @@ import { SpaceGrotesk_700Bold } from '@expo-google-fonts/space-grotesk/700Bold';
 import { DMSans_400Regular } from '@expo-google-fonts/dm-sans/400Regular';
 import { DMSans_500Medium } from '@expo-google-fonts/dm-sans/500Medium';
 import { DMSans_700Bold } from '@expo-google-fonts/dm-sans/700Bold';
-import Animated, { FadeIn, FadeOut, SlideInDown, SlideOutDown, SlideInRight, SlideOutRight } from 'react-native-reanimated';
+import Animated, { Easing, FadeIn, FadeOut, SlideInDown, SlideOutDown, SlideInRight, SlideOutRight } from 'react-native-reanimated';
 
 import { C } from './src/theme';
 import { Store } from './src/store';
@@ -47,18 +47,18 @@ function Root() {
   return (
     <Store.Provider value={store}>
       <View style={[styles.app, { paddingTop: insets.top }]}>
-        <Animated.View key={s.tab} entering={FadeIn.duration(220)} style={{ flex: 1 }}>
+        <Animated.View key={s.tab} entering={FadeIn.duration(140)} style={{ flex: 1 }}>
           <Screen />
         </Animated.View>
         <TabBar />
 
         {s.creating && (
-          <Animated.View entering={SlideInRight.springify().damping(22)} exiting={SlideOutRight.duration(220)} style={[StyleSheet.absoluteFill, styles.overlay, { paddingTop: insets.top }]}>
+          <Animated.View entering={SlideInRight.duration(260).easing(Easing.bezier(0.2, 0.8, 0.2, 1))} exiting={SlideOutRight.duration(220)} style={[StyleSheet.absoluteFill, styles.overlay, { paddingTop: insets.top }]}>
             <CreateRoutine />
           </Animated.View>
         )}
         {s.workout && (
-          <Animated.View entering={SlideInDown.springify().damping(24)} exiting={SlideOutDown.duration(260)} style={[StyleSheet.absoluteFill, styles.overlay, { paddingTop: insets.top }]}>
+          <Animated.View entering={SlideInDown.duration(260).easing(Easing.bezier(0.2, 0.8, 0.2, 1))} exiting={SlideOutDown.duration(260)} style={[StyleSheet.absoluteFill, styles.overlay, { paddingTop: insets.top }]}>
             <Workout />
           </Animated.View>
         )}

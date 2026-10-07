@@ -49,7 +49,7 @@ export default function Access() {
 
       <Card style={{ marginTop: 22, alignItems: 'center', paddingVertical: 26 }}>
         <View style={styles.qrWrap}>
-          <Animated.View key={period} entering={ZoomIn.duration(350)} exiting={FadeOut.duration(150)}>
+          <Animated.View key={period} entering={FadeIn.duration(200)} exiting={FadeOut.duration(150)}>
             <Svg width={232} height={232} viewBox={`0 0 ${N} ${N}`}>
               {cells.map(([r, c]) => <Rect key={r + '-' + c} x={c} y={r} width={1.02} height={1.02} fill={C.bg} />)}
             </Svg>

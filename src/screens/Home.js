@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { ScrollView, View, StyleSheet } from 'react-native';
-import Animated, { FadeInDown, FadeInUp, FadeOutDown, useSharedValue, useAnimatedStyle, withRepeat, withTiming, withDelay, withSpring, Easing } from 'react-native-reanimated';
+import Animated, { FadeIn, FadeInUp, FadeOutDown, useSharedValue, useAnimatedStyle, withRepeat, withTiming, withDelay, withSpring, Easing } from 'react-native-reanimated';
 import { useStore } from '../store';
 import { T, Card, Label, Tap, Button, Grow, st } from '../ui';
 import Icon from '../icons';
@@ -17,10 +17,10 @@ function LiveDot() {
 
 function Bar({ v, i, on, onPress }) {
   const h = useSharedValue(0);
-  useEffect(() => { h.value = withDelay(i * 35, withSpring(v, { damping: 16, stiffness: 120 })); }, []);
+  useEffect(() => { h.value = withTiming(v, { duration: 500, easing: Easing.out(Easing.cubic) }); }, []);
   const a = useAnimatedStyle(() => ({ height: `${h.value}%` }));
   return (
-    <Tap onPress={onPress} feedback="select" scale={0.85} style={styles.barHit} accessibilityLabel={`${7 + i}:00`}>
+    <Tap onPress={onPress} feedback="select" scale={1} style={styles.barHit} accessibilityLabel={`${7 + i}:00`}>
       <Animated.View style={[styles.bar, { backgroundColor: on ? C.lime : '#2E2E33' }, a]} />
     </Tap>
   );
@@ -41,7 +41,7 @@ export default function Home() {
 
   return (
     <ScrollView contentContainerStyle={styles.wrap} showsVerticalScrollIndicator={false}>
-      <Animated.View entering={FadeInDown.duration(400)} style={[st.row, { justifyContent: 'space-between', marginBottom: 22 }]}>
+      <Animated.View style={[st.row, { justifyContent: 'space-between', marginBottom: 22 }]}>
         <View>
           <Label>{GYM}</Label>
           <T f="display" size={30} style={{ marginTop: 6 }}>Hola, Marta</T>
@@ -52,7 +52,7 @@ export default function Home() {
         </Tap>
       </Animated.View>
 
-      <Animated.View entering={FadeInDown.delay(80).duration(450)}>
+      <Animated.View>
         <Card>
           <View style={[st.row, { justifyContent: 'space-between' }]}>
             <Label>Ahora en el gimnasio</Label>
@@ -60,7 +60,7 @@ export default function Home() {
           </View>
           <View style={[st.row, { alignItems: 'flex-end', marginTop: 12, gap: 10 }]}>
             <View style={{ height: 64, overflow: 'hidden', justifyContent: 'flex-end' }}>
-              <Animated.View key={s.people} entering={FadeInUp.duration(350)}>
+              <Animated.View key={s.people} entering={FadeInUp.duration(200)}>
                 <T f="display" size={60} style={{ lineHeight: 64 }}>{s.people}</T>
               </Animated.View>
             </View>
@@ -71,7 +71,7 @@ export default function Home() {
         </Card>
       </Animated.View>
 
-      <Animated.View entering={FadeInDown.delay(160).duration(450)}>
+      <Animated.View>
         <Card style={{ marginTop: 14 }}>
           <View style={[st.row, { justifyContent: 'space-between' }]}>
             <Label>Hoy, por horas</Label>
@@ -83,13 +83,13 @@ export default function Home() {
           <View style={[st.row, { justifyContent: 'space-between', marginTop: 6 }]}>
             {['7h', '11h', '15h', '19h', '23h'].map((h) => <T key={h} size={11} color={C.dim}>{h}</T>)}
           </View>
-          <Animated.View key={bar} entering={FadeInUp.duration(250)}>
+          <Animated.View key={bar} entering={FadeIn.duration(150)}>
             <T f="med" size={14} style={{ marginTop: 12 }}>{barInfo}</T>
           </Animated.View>
         </Card>
       </Animated.View>
 
-      <Animated.View entering={FadeInDown.delay(240).duration(450)}>
+      <Animated.View>
         <Tap scale={0.98} onPress={() => startWorkout(set, today)}>
           <Card style={{ marginTop: 14 }} border={C.line2}>
             <View style={[st.row, { justifyContent: 'space-between' }]}>
@@ -106,7 +106,7 @@ export default function Home() {
         </Tap>
       </Animated.View>
 
-      <Animated.View entering={FadeInDown.delay(320).duration(450)}>
+      <Animated.View>
         <Card style={{ marginTop: 14 }}>
           <Label>Próxima clase</Label>
           <View style={[st.row, { justifyContent: 'space-between', marginTop: 10 }]}>

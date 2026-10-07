@@ -45,7 +45,7 @@ export default function Classes() {
           const spots = b ? (full ? 'En lista de espera' : 'Plaza reservada') : (full ? 'Completa' : `${left} de 12 libres`);
           const btn = b ? (full ? 'Salir de la lista' : 'Cancelar reserva') : (full ? 'Lista de espera' : 'Reservar plaza');
           return (
-            <Animated.View key={key} entering={FadeInDown.delay(i * 80).duration(380)} layout={LinearTransition}>
+            <Animated.View key={key}>
               <Card style={{ marginTop: 14 }} border={b ? C.limeLine : C.line}>
                 <View style={[st.row, { justifyContent: 'space-between' }]}>
                   <T f="display" size={26}>{time}</T>

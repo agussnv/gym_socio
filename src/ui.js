@@ -1,6 +1,6 @@
 import React from 'react';
 import { Pressable, Text, View, Platform, StyleSheet } from 'react-native';
-import Animated, { useSharedValue, useAnimatedStyle, withSpring, withTiming } from 'react-native-reanimated';
+import Animated, { useSharedValue, useAnimatedStyle, withTiming, Easing } from 'react-native-reanimated';
 import * as Haptics from 'expo-haptics';
 import { C, F } from './theme';
 
@@ -16,7 +16,7 @@ export function haptic(kind = 'light') {
 const AP = Animated.createAnimatedComponent(Pressable);
 
 // Botón con muelle al pulsar, como en las apps nativas
-export function Tap({ onPress, style, children, scale = 0.96, feedback = 'light', disabled, accessibilityLabel, hitSlop }) {
+export function Tap({ onPress, style, children, scale = 0.97, feedback = 'light', disabled, accessibilityLabel, hitSlop }) {
   const s = useSharedValue(1);
   const a = useAnimatedStyle(() => ({ transform: [{ scale: s.value }] }));
   return (
@@ -25,8 +25,8 @@ export function Tap({ onPress, style, children, scale = 0.96, feedback = 'light'
       accessibilityLabel={accessibilityLabel}
       disabled={disabled}
       hitSlop={hitSlop}
-      onPressIn={() => { s.value = withSpring(scale, { damping: 18, stiffness: 400 }); }}
-      onPressOut={() => { s.value = withSpring(1, { damping: 14, stiffness: 300 }); }}
+      onPressIn={() => { s.value = withTiming(scale, { duration: 90, easing: Easing.out(Easing.quad) }); }}
+      onPressOut={() => { s.value = withTiming(1, { duration: 140, easing: Easing.out(Easing.quad) }); }}
       onPress={() => { if (feedback) haptic(feedback); onPress && onPress(); }}
       style={[style, a]}
     >
@@ -77,7 +77,7 @@ export function Avatar({ ini, size = 40, bg = C.card2, color = C.text }) {
 // Barra que crece con animación
 export function Grow({ pct, color, height = 6, style }) {
   const w = useSharedValue(0);
-  React.useEffect(() => { w.value = withTiming(pct, { duration: 700 }); }, [pct]);
+  React.useEffect(() => { w.value = withTiming(pct, { duration: 450, easing: Easing.out(Easing.cubic) }); }, [pct]);
   const a = useAnimatedStyle(() => ({ width: `${w.value * 100}%` }));
   return (
     <View style={[{ height, borderRadius: height, backgroundColor: C.line, overflow: 'hidden' }, style]}>

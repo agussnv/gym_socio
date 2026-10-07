@@ -38,7 +38,7 @@ export default function CreateRoutine() {
           const idx = picked.indexOf(id);
           const on = idx >= 0;
           return (
-            <Animated.View key={id} entering={FadeInDown.delay(i * 40)} layout={LinearTransition}>
+            <Animated.View key={id}>
               <Tap feedback="select" scale={0.98} onPress={() => setPicked(on ? picked.filter((x) => x !== id) : [...picked, id])}
                 style={[styles.item, on && { borderColor: C.limeLine, backgroundColor: C.limeSoft }]}>
                 <Avatar ini={EX[id].ini} size={42} />
@@ -47,7 +47,7 @@ export default function CreateRoutine() {
                   <T size={12} color={C.mute} style={{ marginTop: 2 }}>{EX[id].muscle}</T>
                 </View>
                 <View style={[styles.ord, on && { backgroundColor: C.lime, borderColor: C.lime }]}>
-                  {on && <Animated.View entering={ZoomIn.springify()}><T f="bold" size={13} color={C.bg}>{idx + 1}</T></Animated.View>}
+                  {on && <Animated.View entering={FadeIn.duration(180)}><T f="bold" size={13} color={C.bg}>{idx + 1}</T></Animated.View>}
                 </View>
               </Tap>
             </Animated.View>

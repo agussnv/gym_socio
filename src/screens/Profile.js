@@ -17,7 +17,7 @@ function WeightChart({ data }) {
   const min = Math.min(...vals) - 0.4, max = Math.max(...vals) + 0.4;
   const pts = data.map((d, i) => [(i / (data.length - 1)) * (w - 16) + 8, H - 8 - ((d[1] - min) / (max - min)) * (H - 16)]);
   const reveal = useSharedValue(0);
-  useEffect(() => { if (w) { reveal.value = 0; reveal.value = withDelay(200, withTiming(1, { duration: 1100, easing: Easing.out(Easing.cubic) })); } }, [w, data.length]);
+  useEffect(() => { if (w) { reveal.value = 0; reveal.value = withTiming(1, { duration: 700, easing: Easing.out(Easing.cubic) }); } }, [w, data.length]);
   const a = useAnimatedStyle(() => ({ width: `${reveal.value * 100}%` }));
   return (
     <View style={{ height: H, marginTop: 14 }} onLayout={(e) => setW(e.nativeEvent.layout.width)}>
@@ -49,7 +49,7 @@ function Freeze() {
     </View>
   );
   return (
-    <Animated.View layout={LinearTransition.springify()}>
+    <Animated.View>
       <Card style={{ marginTop: 12 }} border={s.freeze !== 'none' ? C.line2 : C.line}>
         <View style={[st.row, { gap: 8 }]}>
           <Icon name="snow" size={18} color={s.freeze === 'none' ? C.mute : C.lime} />
@@ -111,7 +111,7 @@ export default function Profile() {
   };
   return (
     <ScrollView contentContainerStyle={{ padding: 20, paddingTop: 16 }} showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
-      <Animated.View entering={FadeInDown.duration(400)} style={[st.row, { gap: 14 }]}>
+      <Animated.View style={[st.row, { gap: 14 }]}>
         <Avatar ini="MG" size={64} bg={C.lime} color={C.bg} />
         <View style={{ flex: 1 }}>
           <T f="display" size={24}>Marta García</T>
@@ -121,7 +121,7 @@ export default function Profile() {
 
       <View style={[st.row, { gap: 10, marginTop: 20 }]}>
         {[[String(s.visits), 'visitas\neste mes'], ['6', 'semanas\nseguidas'], [String(s.workouts), 'entrenos\nhechos']].map(([v, k], i) => (
-          <Animated.View key={k} entering={FadeInDown.delay(80 + i * 60)} style={{ flex: 1 }}>
+          <Animated.View key={k} style={{ flex: 1 }}>
             <Card style={{ padding: 14 }}>
               <Animated.View key={v} entering={FadeIn}><T f="display" size={26}>{v}</T></Animated.View>
               <T size={12} color={C.mute} style={{ marginTop: 2, lineHeight: 16 }}>{k}</T>
@@ -130,7 +130,7 @@ export default function Profile() {
         ))}
       </View>
 
-      <Animated.View entering={FadeInDown.delay(260)}>
+      <Animated.View>
         <Card style={{ marginTop: 14 }}>
           <View style={[st.row, { justifyContent: 'space-between' }]}>
             <Label>Tu progreso · peso</Label>
@@ -155,7 +155,7 @@ export default function Profile() {
 
       <Label style={{ marginTop: 26 }}>Últimos entrenamientos</Label>
       {HISTORY.map((h, i) => (
-        <Animated.View key={i} entering={FadeInDown.delay(320 + i * 60)} style={styles.hist}>
+        <Animated.View key={i} style={styles.hist}>
           <View style={styles.date}><T size={11} color={C.mute}>{h.wd}</T><T f="display" size={18}>{h.d}</T></View>
           <View style={{ flex: 1 }}>
             <T f="med" size={15}>{h.name}</T>
