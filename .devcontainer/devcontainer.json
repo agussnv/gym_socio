@@ -1,0 +1,6 @@
+{
+  "name": "ZGYM Socio",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:22",
+  "postCreateCommand": "npm install",
+  "postAttachCommand": "echo 'Para abrir la app en el móvil: npm run movil'"
+}
