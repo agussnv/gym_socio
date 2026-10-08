@@ -1,0 +1,19 @@
+name: Diagnostico descarga
+on:
+  push:
+    branches: [diagnostico]
+jobs:
+  d:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          M=$(curl -s -H "expo-platform: android" -H "expo-runtime-version: exposdk:57.0.0" -H "expo-channel-name: main" -H "expo-protocol-version: 1" -H "accept: multipart/mixed,application/expo+json,application/json" "https://u.expo.dev/3f182b83-9873-4a03-be84-6164264cc751")
+          echo "$M" | head -c 300; echo
+          echo "$M" | grep -o '"extra":{.*' | head -c 1500; echo
+          url=$(echo "$M" | grep -o '"launchAsset":{[^}]*' | grep -o 'https[^"]*')
+          echo "URL $url"
+          for h in "" "expo-platform: android" "expo-platform: android|expo-protocol-version: 1" "User-Agent: okhttp/4.12.0|expo-platform: android" "Authorization: Bearer ${{ secrets.EXPO_TOKEN }}|expo-platform: android"; do
+            args=(); IFS='|' read -ra parts <<< "$h"; for p in "${parts[@]}"; do args+=(-H "$p"); done
+            echo "headers [${h%%Bearer*}] -> $(curl -s -o /dev/null -w '%{http_code} %{size_download}' "${args[@]}" "$url")"
+          done
+          curl -s -D - -o /dev/null -H "expo-platform: android" "$url" | head -20
