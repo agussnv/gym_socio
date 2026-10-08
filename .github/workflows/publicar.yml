@@ -35,3 +35,17 @@ jobs:
         env:
           MENSAJE: ${{ github.event.head_commit.message || 'Publicación manual' }}
         run: eas update --channel main --platform all --non-interactive --message "$(echo "$MENSAJE" | head -n 1)"
+
+      - name: Comprobar que Expo Go puede descargarla
+        run: |
+          for p in android ios; do
+            echo "== $p (sin sesión)"
+            curl -s -o manifest-$p.txt -w "HTTP %{http_code}\n" \
+              -H "expo-platform: $p" -H "expo-runtime-version: exposdk:57.0.0" -H "expo-channel-name: main" \
+              -H "accept: multipart/mixed,application/expo+json,application/json" \
+              "https://u.expo.dev/3f182b83-9873-4a03-be84-6164264cc751"
+            head -c 1200 manifest-$p.txt; echo
+            url=$(grep -o '"launchAsset":{[^}]*"url":"[^"]*"' manifest-$p.txt | grep -o 'https[^"]*' | head -1)
+            echo "bundle: $url"
+            [ -n "$url" ] && curl -s -o /dev/null -w "bundle HTTP %{http_code} %{size_download} bytes\n" "$url"
+          done
