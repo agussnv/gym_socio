@@ -32,4 +32,6 @@ jobs:
           node scripts/eas-config.js
 
       - name: Publicar
-        run: eas update --channel main --platform all --non-interactive --message "${{ github.event.head_commit.message || 'Publicación manual' }}"
+        env:
+          MENSAJE: ${{ github.event.head_commit.message || 'Publicación manual' }}
+        run: eas update --channel main --platform all --non-interactive --message "$(echo "$MENSAJE" | head -n 1)"

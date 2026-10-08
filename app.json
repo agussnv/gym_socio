@@ -19,6 +19,15 @@
     ],
     "runtimeVersion": {
       "policy": "sdkVersion"
+    },
+    "owner": "agussnvs-team",
+    "extra": {
+      "eas": {
+        "projectId": "3f182b83-9873-4a03-be84-6164264cc751"
+      }
+    },
+    "updates": {
+      "url": "https://u.expo.dev/3f182b83-9873-4a03-be84-6164264cc751"
     }
   }
 }
