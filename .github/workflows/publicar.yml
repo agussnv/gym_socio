@@ -47,5 +47,6 @@ jobs:
             head -c 1200 manifest-$p.txt; echo
             url=$(grep -o '"launchAsset":{[^}]*"url":"[^"]*"' manifest-$p.txt | grep -o 'https[^"]*' | head -1)
             echo "bundle: $url"
-            [ -n "$url" ] && curl -s -o /dev/null -w "bundle HTTP %{http_code} %{size_download} bytes\n" "$url"
+            curl -s -w "\nbundle sin sesion HTTP %{http_code}\n" "$url" | tail -c 400
+            curl -s -o /dev/null -w "bundle con sesion HTTP %{http_code} %{size_download} bytes\n" -H "Authorization: Bearer $EXPO_TOKEN" "$url"
           done
